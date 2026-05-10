@@ -1,0 +1,4 @@
+/* static/css/base.css */
+#content {
+    padding: 5px !important;  /* Ghi đè lên CSS*/
+}

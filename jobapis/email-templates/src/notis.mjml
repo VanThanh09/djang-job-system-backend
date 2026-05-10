@@ -1,0 +1,32 @@
+<mjml>
+  <mj-head>
+    <mj-attributes>
+      <mj-all font-family="Arial, sans-serif" />
+      <mj-text font-size="15px" color="#222222" line-height="22px" />
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#ffffff">
+    <mj-section padding="20px 0">
+      <mj-column>
+
+        <mj-text font-size="18px" font-weight="bold">
+          {{ title }}
+        </mj-text>
+
+        <mj-divider border-width="1px" border-color="#dddddd" />
+
+        <mj-text>
+          <strong>Vị trí:</strong> {{ content }}
+        </mj-text>
+
+        <mj-text>
+          <strong>Ngày đăng:</strong> {{ created_at }}
+        </mj-text>
+
+        <mj-button background-color="#333333" color="#ffffff" border-radius="4px" align="left" href="http://localhost:3000/job/{{ target_id }}">
+          Xem chi tiết
+        </mj-button>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>
