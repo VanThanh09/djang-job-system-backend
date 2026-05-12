@@ -25,7 +25,7 @@ def ndarray_to_bytes(arr: np.ndarray) -> bytes:
 
 def bytes_to_ndarray(b: bytes) -> np.ndarray:
     buf = io.BytesIO(b)
-    return np.load(buf, allow_pickle=False)
+    return np.load(buf, allow_pickle=True)
 
 
 def translate_to_en(text: str) -> str:

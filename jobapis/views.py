@@ -660,12 +660,15 @@ class InterviewSessionViewSet(viewsets.ViewSet, generics.ListCreateAPIView, gene
             return Response({"detail": "Session already ended."}, status=status.HTTP_400_BAD_REQUEST)
 
         from django.utils.timezone import now as tz_now
+        now_time = tz_now()
+
+        if now_time <= session.end_time:
+            return Response({"detail": "Session is still within active time, ignored."}, status=status.HTTP_200_OK)
 
         session.status = "DONE"
         session.save(update_fields=["status"])
 
-        # Đppfng thời đóng log cho tất cả participant chưa được ghi left_at
-        now_time = tz_now()
+        # Đồng thời đóng log cho tất cả participant chưa được ghi left_at
         for participant in session.interviewparticipant_set.all():
             participant.logs.filter(left_at__isnull=True).update(left_at=now_time)
 
