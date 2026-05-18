@@ -52,7 +52,8 @@ services:
       DJANGO_SETTINGS_MODULE: job.settings
     ports:
       - "8000:8000"
-    command: daphne -b 0.0.0.0 -p 8000 job.asgi:application
+#    command: daphne -b 0.0.0.0 -p 8000 job.asgi:application
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./static:/app/static
       - .:/app

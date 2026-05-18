@@ -7,17 +7,21 @@ from cloudinary.models import CloudinaryField
 class User(AbstractUser):
     class UserRole(models.TextChoices):
         ADMIN = 'AD', _("ADMIN")
-        STAFF = 'ST', _("STAFF")
-        EMPLOYER = 'EM', _("EMPLOYER")
-        CANDIDATE = 'CA', _("CANDIDATE")
+        STAFF = 'ST', _("NHÂN VIÊN")
+        EMPLOYER = 'EM', _("NHÀ TUYỂN DỤNG")
+        CANDIDATE = 'CA', _("ỨNG VIÊN")
 
-    avatar = CloudinaryField(null=True)
+    avatar = CloudinaryField(null=True, default="image/upload/v1778378415/mdxku1ihvvwkfdewxveb.jpg")
     user_role = models.CharField(max_length=2, choices=UserRole, default=UserRole.CANDIDATE)
     phone_number = models.CharField(max_length=32, unique=True)
     email = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    class Meta:
+        verbose_name = "người dùng"
+        verbose_name_plural = "Người dùng"
 
 
 class CandidateInfo(models.Model):
@@ -38,15 +42,15 @@ class CandidateVector(models.Model):
 
 class Company(models.Model):
     class CompanyStatus(models.TextChoices):
-        APPROVED = 'AP', _("APPROVED")
-        REJECTED = 'RE', _("REJECTED")
-        PENDING = 'PE', _("PENDING")
+        APPROVED = 'AP', _("CHẤP NHẬN")
+        REJECTED = 'RE', _("TỪ CHỐI")
+        PENDING = 'PE', _("ĐANG CHỜ DUYỆT")
 
     name = models.CharField(max_length=255)
     description = models.TextField()
     tax_id = models.CharField(max_length=100)
     address = models.TextField()
-    status = models.CharField(max_length=2, choices=CompanyStatus.choices, default=CompanyStatus.APPROVED)
+    status = models.CharField(max_length=2, choices=CompanyStatus.choices, default=CompanyStatus.PENDING)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
 
@@ -54,6 +58,10 @@ class Company(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+    class Meta:
+        verbose_name = "công ty"
+        verbose_name_plural = "Công ty"
 
 
 class CompanyImages(models.Model):
@@ -69,6 +77,10 @@ class Category(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    class Meta:
+        verbose_name = "danh mục"
+        verbose_name_plural = "Danh mục"
+
 
 class JobPosting(models.Model):
     title = models.CharField(max_length=255)
@@ -79,12 +91,17 @@ class JobPosting(models.Model):
     is_active = models.BooleanField(default=True)
     is_paid = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_verified = models.BooleanField(default=False, verbose_name="Trạng thái")
 
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='postings')
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='postings')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='postings', verbose_name="Danh mục")
 
     def __str__(self):
         return f"{self.title}"
+
+    class Meta:
+        verbose_name = "bài đăng"
+        verbose_name_plural = "Bài đăng"
 
 
 class PostingVector(models.Model):
@@ -110,6 +127,10 @@ class JobApplication(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name} apply for: {self.job_posting.title} - status: {self.status}"
+
+    class Meta:
+        verbose_name = "bài ứng tuyển"
+        verbose_name_plural = "Bài ứng tuyển"
 
 
 class Notification(models.Model):
@@ -163,6 +184,10 @@ class JobPostingFee(models.Model):
     def __str__(self):
         return f"{self.amount} VND"
 
+    class Meta:
+        verbose_name = "mức phí"
+        verbose_name_plural = "Phí đăng bài"
+
 
 class Invoice(models.Model):
     STATUS_CHOICES = (
@@ -180,6 +205,10 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"Invoice {self.id} - {self.status} - {self.amount} VND"
+
+    class Meta:
+        verbose_name = "hóa đơn"
+        verbose_name_plural = "Hóa đơn"
 
 
 class Conversation(models.Model):
